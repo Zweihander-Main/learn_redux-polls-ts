@@ -1,16 +1,129 @@
 {
-  "name": "redux-polls",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-scripts": "1.1.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
+	"name": "redux-polls-ts",
+	"version": "1.0.0",
+	"private": true,
+	"author": "Zweihänder",
+	"license": "MIT",
+	"description": "TypeScript implementation of Tyler McGinnis's Redux-Polls app.",
+	"dependencies": {
+		"react": "^16.13.0",
+		"react-dom": "^16.13.0",
+		"react-scripts": "3.4.0"
+	},
+	"devDependencies": {
+		"@testing-library/jest-dom": "^5.1.1",
+		"@testing-library/react": "^9.4.1",
+		"@testing-library/user-event": "^10.0.0",
+		"@types/react": "^16.9.23",
+		"@types/react-dom": "^16.9.5",
+		"@typescript-eslint/eslint-plugin": "^2.22.0",
+		"@typescript-eslint/parser": "^2.22.0",
+		"eslint": "^6.8.0",
+		"eslint-config-prettier": "^6.10.0",
+		"eslint-plugin-prettier": "^3.1.2",
+		"eslint-plugin-react": "^7.18.3",
+		"prettier": "^1.19.1",
+		"stylelint": "^13.2.0",
+		"stylelint-config-prettier": "^8.0.1",
+		"stylelint-config-standard": "^20.0.0",
+		"tslib": "^1.11.1",
+		"typescript": "^3.8.3"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject"
+	},
+	"engines": {
+		"node": "12.x"
+	},
+	"eslintConfig": {
+		"env": {
+			"browser": true,
+			"es6": true,
+			"node": true
+		},
+		"parserOptions": {
+			"project": "tsconfig.json",
+			"ecmaVersion": 2019,
+			"ecmaFeatures": {
+				"jsx": true
+			},
+			"useJSXTextNode": true
+		},
+		"plugins": [
+			"@typescript-eslint",
+			"react"
+		],
+		"extends": [
+			"eslint:recommended",
+			"react-app",
+			"plugin:@typescript-eslint/eslint-recommended",
+			"plugin:@typescript-eslint/recommended",
+			"plugin:@typescript-eslint/recommended-requiring-type-checking",
+			"plugin:react/recommended",
+			"prettier",
+			"prettier/@typescript-eslint",
+			"prettier/react"
+		],
+		"rules": {
+			"quotes": [
+				"error",
+				"single"
+			],
+			"semi": [
+				"error",
+				"always"
+			],
+			"no-console": [
+				"error",
+				{
+					"allow": [
+						"warn",
+						"error",
+						"debug"
+					]
+				}
+			],
+			"no-mixed-spaces-and-tabs": [
+				"error",
+				"smart-tabs"
+			]
+		}
+	},
+	"prettier": {
+		"singleQuote": true,
+		"trailingComma": "es5",
+		"tabWidth": 4,
+		"useTabs": true,
+		"arrowParens": "always"
+	},
+	"stylelint": {
+		"extends": [
+			"stylelint-config-standard",
+			"stylelint-config-prettier"
+		],
+		"rules": {
+			"indentation": "tab",
+			"max-empty-lines": 2,
+			"comment-whitespace-inside": null,
+			"declaration-block-no-shorthand-property-overrides": true,
+			"declaration-colon-newline-after": null,
+			"no-descending-specificity": null
+		}
+	},
+	"browserslist": {
+		"production": [
+			"> 0.2%",
+			"Firefox ESR",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	}
 }
