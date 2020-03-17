@@ -1,14 +1,4 @@
-export interface User {
-	id: string;
-	name: string;
-	avatarURL: string;
-	answers: { [key: string]: string };
-	polls: Array<string>;
-}
-
-export interface Users {
-	[key: string]: User;
-}
+import { Users, Polls, Poll, FlatPoll } from '../types';
 
 /* eslint-disable @typescript-eslint/camelcase */
 let users: Users = {
@@ -47,26 +37,6 @@ let users: Users = {
 	},
 };
 /* eslint-enable @typescript-eslint/camelcase */
-
-export interface Choice {
-	text: string;
-	votes: Array<string>;
-}
-
-export interface Poll {
-	id: string;
-	question: string;
-	author: string;
-	timestamp: number;
-	a: Choice;
-	b: Choice;
-	c: Choice;
-	d: Choice;
-}
-
-export interface Polls {
-	[key: string]: Poll;
-}
 
 let polls: Polls = {
 	'8xf0y6ziyjabvozdd253nd': {
@@ -226,15 +196,6 @@ export function _getPolls(): Promise<Polls> {
 	});
 }
 
-export interface FlatPoll {
-	question: string;
-	author: string;
-	a: string;
-	b: string;
-	c: string;
-	d: string;
-}
-
 function formatPoll(poll: FlatPoll): Poll {
 	return {
 		...poll,
@@ -259,7 +220,7 @@ function formatPoll(poll: FlatPoll): Poll {
 	} as Poll;
 }
 
-export function _savePoll(poll: FlatPol): Promise<Poll> {
+export function _savePoll(poll: FlatPoll): Promise<Poll> {
 	return new Promise((res) => {
 		const formattedPoll = formatPoll(poll);
 

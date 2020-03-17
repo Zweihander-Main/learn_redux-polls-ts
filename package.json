@@ -8,7 +8,10 @@
 	"dependencies": {
 		"react": "^16.13.0",
 		"react-dom": "^16.13.0",
-		"react-scripts": "3.4.0"
+		"react-redux": "^7.2.0",
+		"react-scripts": "3.4.0",
+		"redux": "^4.0.5",
+		"redux-thunk": "^2.3.0"
 	},
 	"devDependencies": {
 		"@testing-library/jest-dom": "^5.1.1",
@@ -16,6 +19,7 @@
 		"@testing-library/user-event": "^10.0.0",
 		"@types/react": "^16.9.23",
 		"@types/react-dom": "^16.9.5",
+		"@types/react-redux": "^7.1.7",
 		"@typescript-eslint/eslint-plugin": "^2.22.0",
 		"@typescript-eslint/parser": "^2.22.0",
 		"eslint": "^6.8.0",

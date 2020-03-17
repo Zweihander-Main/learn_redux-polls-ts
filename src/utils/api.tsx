@@ -1,12 +1,5 @@
-import {
-	_getUsers,
-	_getPolls,
-	_savePoll,
-	_savePollAnswer,
-	Poll,
-	Polls,
-	Users,
-} from './_DATA.js';
+import { _getUsers, _getPolls, _savePoll, _savePollAnswer } from './_DATA';
+import { Poll, Polls, FlatPoll, Users } from '../types';
 import { isObject } from './helpers';
 
 function flattenPoll(poll: Poll): Record<string, string> {
@@ -24,7 +17,7 @@ function flattenPoll(poll: Poll): Record<string, string> {
 	}, {});
 }
 
-function formatPolls(polls: Polls): Record<string, string> {
+function formatPolls(polls: Polls): Polls {
 	const pollIds = Object.keys(polls);
 
 	return pollIds.reduce((formattedPolls, id) => {
@@ -33,7 +26,7 @@ function formatPolls(polls: Polls): Record<string, string> {
 	}, {});
 }
 
-function formatUsers(users: Users): Record<string, string> {
+function formatUsers(users: Users): Users {
 	return Object.keys(users).reduce((formattedUsers, id) => {
 		const user = users[id];
 
@@ -47,8 +40,8 @@ function formatUsers(users: Users): Record<string, string> {
 }
 
 export function getInitialData(): Promise<{
-	users: Record<string, string>;
-	polls: Record<string, string>;
+	users: Users;
+	polls: Polls;
 }> {
 	return Promise.all([_getUsers(), _getPolls()]).then(([users, polls]) => ({
 		users: formatUsers(users),
@@ -56,8 +49,8 @@ export function getInitialData(): Promise<{
 	}));
 }
 
-export function savePoll(poll: Poll): Promise<Record<string, string>> {
-	return _savePoll(poll).then((p) => flattenPoll(p));
+export function savePoll(poll: FlatPoll): Promise<Record<string, string>> {
+	return _savePoll(poll).then((p: Poll) => flattenPoll(p));
 }
 
 export function savePollAnswer(args: {
