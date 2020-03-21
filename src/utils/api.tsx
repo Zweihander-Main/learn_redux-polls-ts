@@ -1,8 +1,16 @@
-import { _getUsers, _getPolls, _savePoll, _savePollAnswer } from './_DATA';
-import { Poll, Polls, FlatPoll, Users } from '../types';
+import {
+	_getUsers,
+	_getPolls,
+	_savePoll,
+	_savePollAnswer,
+	RawUsers,
+	RawPolls,
+	RawPoll,
+} from './_DATA';
+import { Poll, Polls, Users, PollToSave, AddAnswerData } from '../types';
 import { isObject } from './helpers';
 
-function flattenPoll(poll: Poll): Record<string, string> {
+function flattenPoll(poll: RawPoll): Poll {
 	return Object.keys(poll).reduce((flattenedPoll, key) => {
 		const val = poll[key];
 
@@ -14,19 +22,19 @@ function flattenPoll(poll: Poll): Record<string, string> {
 
 		flattenedPoll[key] = val;
 		return flattenedPoll;
-	}, {});
+	}, {} as Poll);
 }
 
-function formatPolls(polls: Polls): Polls {
+function formatPolls(polls: RawPolls): Polls {
 	const pollIds = Object.keys(polls);
 
 	return pollIds.reduce((formattedPolls, id) => {
 		formattedPolls[id] = flattenPoll(polls[id]);
 		return formattedPolls;
-	}, {});
+	}, {} as Polls);
 }
 
-function formatUsers(users: Users): Users {
+function formatUsers(users: RawUsers): Users {
 	return Object.keys(users).reduce((formattedUsers, id) => {
 		const user = users[id];
 
@@ -36,27 +44,25 @@ function formatUsers(users: Users): Users {
 		};
 
 		return formattedUsers;
-	}, {});
+	}, {} as Users);
 }
 
 export function getInitialData(): Promise<{
 	users: Users;
 	polls: Polls;
 }> {
-	return Promise.all([_getUsers(), _getPolls()]).then(([users, polls]) => ({
-		users: formatUsers(users),
-		polls: formatPolls(polls),
-	}));
+	return Promise.all([_getUsers(), _getPolls()]).then(
+		([users, polls]: [RawUsers, RawPolls]) => ({
+			users: formatUsers(users),
+			polls: formatPolls(polls),
+		})
+	);
 }
 
-export function savePoll(poll: FlatPoll): Promise<Record<string, string>> {
-	return _savePoll(poll).then((p: Poll) => flattenPoll(p));
+export function savePoll(poll: PollToSave): Promise<Poll> {
+	return _savePoll(poll).then((p: RawPoll) => flattenPoll(p));
 }
 
-export function savePollAnswer(args: {
-	authedUser: string;
-	id: string;
-	answer: string;
-}): Promise<void> {
+export function savePollAnswer(args: AddAnswerData): Promise<void> {
 	return _savePollAnswer(args);
 }

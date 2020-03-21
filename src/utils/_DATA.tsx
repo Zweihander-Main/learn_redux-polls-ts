@@ -1,7 +1,39 @@
-import { Users, Polls, Poll, FlatPoll } from '../types';
+import { PollToSave, AddAnswerData } from '../types';
+
+interface RawUser {
+	id: string;
+	name: string;
+	avatarURL: string;
+	answers: { [key: string]: string };
+	polls: Array<string>;
+}
+
+export interface RawUsers {
+	[key: string]: RawUser;
+}
+
+interface RawChoice {
+	text: string;
+	votes: Array<string>;
+}
+
+export interface RawPoll {
+	id: string;
+	question: string;
+	author: string;
+	timestamp: number;
+	a: RawChoice;
+	b: RawChoice;
+	c: RawChoice;
+	d: RawChoice;
+}
+
+export interface RawPolls {
+	[key: string]: RawPoll;
+}
 
 /* eslint-disable @typescript-eslint/camelcase */
-let users: Users = {
+let users: RawUsers = {
 	sarah_edo: {
 		id: 'sarah_edo',
 		name: 'Sarah Drasner',
@@ -38,7 +70,7 @@ let users: Users = {
 };
 /* eslint-enable @typescript-eslint/camelcase */
 
-let polls: Polls = {
+let polls: RawPolls = {
 	'8xf0y6ziyjabvozdd253nd': {
 		id: '8xf0y6ziyjabvozdd253nd',
 		question: 'Who is the best basketball player to ever live?',
@@ -184,19 +216,19 @@ function generateUID(): string {
 	);
 }
 
-export function _getUsers(): Promise<Users> {
+export function _getUsers(): Promise<RawUsers> {
 	return new Promise((res) => {
 		setTimeout(() => res({ ...users }), 1000);
 	});
 }
 
-export function _getPolls(): Promise<Polls> {
+export function _getPolls(): Promise<RawPolls> {
 	return new Promise((res) => {
 		setTimeout(() => res({ ...polls }), 1000);
 	});
 }
 
-function formatPoll(poll: FlatPoll): Poll {
+function formatPoll(poll: PollToSave): RawPoll {
 	return {
 		...poll,
 		id: generateUID(),
@@ -217,10 +249,10 @@ function formatPoll(poll: FlatPoll): Poll {
 			text: poll.d,
 			votes: [],
 		},
-	} as Poll;
+	} as RawPoll;
 }
 
-export function _savePoll(poll: FlatPoll): Promise<Poll> {
+export function _savePoll(poll: PollToSave): Promise<RawPoll> {
 	return new Promise((res) => {
 		const formattedPoll = formatPoll(poll);
 
@@ -239,39 +271,37 @@ export function _savePollAnswer({
 	authedUser,
 	id,
 	answer,
-}: {
-	authedUser: string;
-	id: string;
-	answer: string;
-}): Promise<void> {
+}: AddAnswerData): Promise<void> {
 	return new Promise((res) => {
-		setTimeout(() => {
-			const user = users[authedUser];
-			const poll = polls[id];
+		if (authedUser) {
+			setTimeout(() => {
+				const user = users[authedUser];
+				const poll = polls[id];
 
-			users = {
-				...users,
-				[authedUser]: {
-					...user,
-					answers: {
-						...user.answers,
-						[id]: answer,
+				users = {
+					...users,
+					[authedUser]: {
+						...user,
+						answers: {
+							...user.answers,
+							[id]: answer,
+						},
 					},
-				},
-			};
+				};
 
-			polls = {
-				...polls,
-				[id]: {
-					...poll,
-					[answer]: {
-						...poll[answer],
-						votes: poll[answer].votes.concat([authedUser]),
+				polls = {
+					...polls,
+					[id]: {
+						...poll,
+						[answer]: {
+							...poll[answer],
+							votes: poll[answer].votes.concat([authedUser]),
+						},
 					},
-				},
-			};
+				};
 
-			res();
-		}, 500);
+				res();
+			}, 500);
+		}
 	});
 }
