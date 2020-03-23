@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { Users, Polls, RootState, RootAction } from '../types';
-import { handleInitialData } from '../actions/shared';
+import { RootState } from '../types';
 
 const Leaderboard: React.FC<PropsFromRedux> = ({
 	users,
@@ -55,20 +53,7 @@ const mapState = ({ users }: RootState): LeaderboardMappedState => {
 	};
 };
 
-const mapDispatchToProps = (
-	dispatch: ThunkDispatch<
-		Users & Polls,
-		Users & Polls & undefined,
-		RootAction
-	>
-): { [key: string]: Function } => {
-	return {
-		handleInitialDataDispatch: (): Promise<void> =>
-			dispatch(handleInitialData()),
-	};
-};
-
-export const connector = connect(mapState, mapDispatchToProps);
+export const connector = connect(mapState);
 
 export type PropsFromRedux = ConnectedProps<typeof connector>;
 
